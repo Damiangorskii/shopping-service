@@ -1,0 +1,9 @@
+scrape_configs:
+  - job_name: 'prometheus-shopping-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['shopping-service:8083']
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: [ 'cadvisor:8080' ]
