@@ -10,4 +10,5 @@ public interface ShoppingCartRepository extends ReactiveMongoRepository<Shopping
     Mono<ShoppingCart> findShoppingCartById(UUID id);
 
     Mono<Void> deleteShoppingCartById(UUID id);
+
 }
