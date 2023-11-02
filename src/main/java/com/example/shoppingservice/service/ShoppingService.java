@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
-public class ShoppingCartService {
+public class ShoppingService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductClient productClient;
 
