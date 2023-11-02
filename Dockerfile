@@ -8,6 +8,6 @@ LABEL maintainer="damian" \
 
 COPY target/shopping-service-0.0.1-SNAPSHOT.jar /app/shopping-service.jar
 
-EXPOSE 8083
+EXPOSE 8084
 
 CMD ["java", "-jar", "/app/shopping-service.jar"]

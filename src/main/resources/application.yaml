@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8084
   error:
     include-message: always
 
@@ -11,6 +11,21 @@ management:
   endpoint:
     health:
       show-details: always
+
+internal:
+  api:
+    search-service:
+      url: http://localhost:8083/search
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: shopping
+      username: shopping-service
+      password: Password123!
+
 
 logging:
   level:
