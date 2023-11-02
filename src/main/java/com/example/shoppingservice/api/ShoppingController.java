@@ -23,28 +23,28 @@ public class ShoppingController {
         return shoppingCartService.createShoppingCart(requestBody);
     }
 
-    @GetMapping
-    public Mono<ShoppingCart> getShoppingCart(final @RequestParam UUID cartId) {
+    @GetMapping("{cartId}")
+    public Mono<ShoppingCart> getShoppingCart(final @PathVariable UUID cartId) {
         return shoppingCartService.retrieveShoppingCart(cartId);
     }
 
-    @PutMapping
-    public Mono<ShoppingCart> updateShoppingCart(final @RequestParam UUID cartId, final @RequestBody @Valid ShoppingCartRequestBody requestBody) {
+    @PutMapping("{cartId}")
+    public Mono<ShoppingCart> updateShoppingCart(final @PathVariable UUID cartId, final @RequestBody @Valid ShoppingCartRequestBody requestBody) {
         return shoppingCartService.editShoppingCart(cartId, requestBody);
     }
 
-    @PatchMapping("/add")
-    public Mono<ShoppingCart> addProductsToShoppingCart(final @RequestParam UUID cartId, final @RequestParam List<UUID> productIds) {
+    @PatchMapping("{cartId}/add")
+    public Mono<ShoppingCart> addProductsToShoppingCart(final @PathVariable UUID cartId, final @RequestParam List<UUID> productIds) {
         return shoppingCartService.addProductsToShoppingCart(cartId, productIds);
     }
 
-    @PatchMapping("/remove")
-    public Mono<ShoppingCart> removeProductsFromShoppingCart(final @RequestParam UUID cartId, final @RequestParam List<UUID> productIds) {
+    @PatchMapping("{cartId}/remove")
+    public Mono<ShoppingCart> removeProductsFromShoppingCart(final @PathVariable UUID cartId, final @RequestParam List<UUID> productIds) {
         return shoppingCartService.removeProductsFromShoppingCart(cartId, productIds);
     }
 
-    @DeleteMapping
-    public Mono<Void> deleteShoppingCart(final @RequestParam UUID cartId) {
+    @DeleteMapping("{cartId}")
+    public Mono<Void> deleteShoppingCart(final @PathVariable UUID cartId) {
         return shoppingCartService.deleteShoppingCart(cartId);
     }
 }
