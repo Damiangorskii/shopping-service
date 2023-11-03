@@ -15,7 +15,7 @@ management:
 internal:
   api:
     search-service:
-      url: http://localhost:8083/search
+      url: http://search-service:8083/search
 
 spring:
   data:
