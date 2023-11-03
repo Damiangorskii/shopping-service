@@ -30,6 +30,7 @@ public class ShoppingService {
     public Mono<ShoppingCart> createShoppingCart(final ShoppingCartRequestBody requestBody) {
         return productClient.getAllProducts()
                 .filter(product -> requestBody.products().contains(product.getId()))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "No available products found"))))
                 .collectList()
                 .map(productList -> new ShoppingCart(UUID.randomUUID(), productList))
                 .flatMap(shoppingCartRepository::save);
@@ -38,6 +39,7 @@ public class ShoppingService {
     public Mono<ShoppingCart> editShoppingCart(final UUID cartId, final ShoppingCartRequestBody requestBody) {
         return productClient.getAllProducts()
                 .filter(product -> requestBody.products().contains(product.getId()))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found"))))
                 .collectList()
                 .zipWith(shoppingCartRepository.findShoppingCartById(cartId))
                 .flatMap(tuple -> updateProducts(tuple.getT2(), tuple.getT1()))
@@ -48,6 +50,7 @@ public class ShoppingService {
     public Mono<ShoppingCart> addProductsToShoppingCart(final UUID cartId, final List<UUID> productIds) {
         return productClient.getAllProducts()
                 .filter(product -> productIds.contains(product.getId()))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found"))))
                 .collectList()
                 .zipWith(shoppingCartRepository.findShoppingCartById(cartId))
                 .flatMap(tuple -> addProducts(tuple.getT2(), tuple.getT1()))
