@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ class ShoppingCartRepositoryTestIT {
     @Test
     void should_find_cart_by_id() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
         shoppingCartRepository.save(shoppingCart).block();
 
         shoppingCartRepository.findShoppingCartById(cartId)
@@ -31,7 +32,7 @@ class ShoppingCartRepositoryTestIT {
     @Test
     void should_delete_by_id() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
         shoppingCartRepository.save(shoppingCart).block();
 
         shoppingCartRepository.deleteShoppingCartById(cartId)

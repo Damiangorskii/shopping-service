@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -32,7 +34,7 @@ public class ShoppingService {
                 .filter(product -> requestBody.products().contains(product.getId()))
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "No available products found"))))
                 .collectList()
-                .map(productList -> new ShoppingCart(UUID.randomUUID(), productList))
+                .map(productList -> new ShoppingCart(UUID.randomUUID(), productList, LocalDateTime.now()))
                 .flatMap(shoppingCartRepository::save);
     }
 
@@ -69,6 +71,11 @@ public class ShoppingService {
         return shoppingCartRepository.findShoppingCartById(id)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Shopping cart not found"))))
                 .flatMap(shoppingCart -> shoppingCartRepository.deleteShoppingCartById(shoppingCart.getId()));
+    }
+
+    public Mono<Void> deleteOldCarts() {
+        LocalDateTime oneMinuteAgo = LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1);
+        return shoppingCartRepository.deleteByInsertDateTimeBefore(oneMinuteAgo);
     }
 
     private Mono<ShoppingCart> updateProducts(final ShoppingCart shoppingCart, final List<Product> newProducts) {

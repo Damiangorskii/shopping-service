@@ -94,7 +94,7 @@ class ShoppingServiceTest {
         Product product2 = ProductDataProvider.getSimpleProduct();
         ShoppingCartRequestBody requestBody = new ShoppingCartRequestBody(List.of(product1.getId(), product2.getId()));
         List<Product> productList = Arrays.asList(product1, product2);
-        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), productList);
+        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), productList, LocalDateTime.now());
 
         when(productClient.getAllProducts()).thenReturn(Flux.fromIterable(productList));
         when(shoppingCartRepository.save(any())).thenReturn(Mono.just(shoppingCart));
@@ -132,8 +132,8 @@ class ShoppingServiceTest {
         Product product1 = ProductDataProvider.getSimpleProduct();
         Product product2 = ProductDataProvider.getSimpleProduct();
         List<Product> productList = Arrays.asList(product1, product2);
-        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList());
-        ShoppingCart updatedCart = new ShoppingCart(cartId, productList);
+        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
+        ShoppingCart updatedCart = new ShoppingCart(cartId, productList, LocalDateTime.now());
 
         when(productClient.getAllProducts()).thenReturn(Flux.fromIterable(productList));
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
@@ -153,7 +153,7 @@ class ShoppingServiceTest {
     @Test
     void should_return_error_when_no_products_found() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
 
         when(productClient.getAllProducts()).thenReturn(Flux.empty());
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
@@ -193,8 +193,8 @@ class ShoppingServiceTest {
         Product product1 = ProductDataProvider.getSimpleProduct();
         Product product2 = ProductDataProvider.getSimpleProduct();
         List<Product> productList = Arrays.asList(product1, product2);
-        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.singletonList(product1));
-        ShoppingCart updatedCart = new ShoppingCart(cartId, productList);
+        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.singletonList(product1), LocalDateTime.now());
+        ShoppingCart updatedCart = new ShoppingCart(cartId, productList, LocalDateTime.now());
 
         when(productClient.getAllProducts()).thenReturn(Flux.fromIterable(productList));
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
@@ -215,7 +215,7 @@ class ShoppingServiceTest {
     void should_return_add_not_found_when_no_matching_products_found() {
         UUID cartId = UUID.randomUUID();
         List<Product> productList = List.of(ProductDataProvider.getSimpleProduct());
-        ShoppingCart existingCart = new ShoppingCart(cartId, productList);
+        ShoppingCart existingCart = new ShoppingCart(cartId, productList, LocalDateTime.now());
 
         when(productClient.getAllProducts()).thenReturn(Flux.empty());
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
@@ -257,8 +257,8 @@ class ShoppingServiceTest {
         Product product1 = ProductDataProvider.getSimpleProduct();
         List<Product> productList = Collections.singletonList(product1);
         List<UUID> productsToRemove = Collections.singletonList(productIds.get(0));
-        ShoppingCart existingCart = new ShoppingCart(cartId, productList);
-        ShoppingCart updatedCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart existingCart = new ShoppingCart(cartId, productList, LocalDateTime.now());
+        ShoppingCart updatedCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
 
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
         when(shoppingCartRepository.save(any())).thenReturn(Mono.just(updatedCart));
@@ -278,7 +278,7 @@ class ShoppingServiceTest {
     void should_return_unchanged_cart_if_products_to_remove_empty() {
         UUID cartId = UUID.randomUUID();
         List<UUID> productsToRemove = Collections.emptyList();
-        ShoppingCart existingCart = new ShoppingCart(cartId, List.of(ProductDataProvider.getSimpleProduct()));
+        ShoppingCart existingCart = new ShoppingCart(cartId, List.of(ProductDataProvider.getSimpleProduct()), LocalDateTime.now());
 
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
         when(shoppingCartRepository.save(any())).thenReturn(Mono.just(existingCart));
@@ -310,7 +310,7 @@ class ShoppingServiceTest {
     @Test
     void should_successfully_delete_cart() {
         UUID cartId = UUID.randomUUID();
-        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList());
+        ShoppingCart existingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
 
         when(shoppingCartRepository.findShoppingCartById(cartId)).thenReturn(Mono.just(existingCart));
         when(shoppingCartRepository.deleteShoppingCartById(cartId)).thenReturn(Mono.empty());

@@ -115,7 +115,7 @@ class ShoppingControllerTest {
 
     @Test
     void should_return_empty_cart() {
-        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), Collections.emptyList());
+        ShoppingCart shoppingCart = new ShoppingCart(UUID.randomUUID(), Collections.emptyList(), LocalDateTime.now());
         when(shoppingService.createShoppingCart(any()))
                 .thenReturn(Mono.just(shoppingCart));
 
