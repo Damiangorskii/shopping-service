@@ -3,7 +3,7 @@ package com.example.shoppingservice.service;
 import com.example.shoppingservice.ProductDataProvider;
 import com.example.shoppingservice.client.ProductClient;
 import com.example.shoppingservice.model.*;
-import com.example.shoppingservice.repository.ShoppingCartRepository;
+import com.example.shoppingservice.repository.ShoppingCartRepositoryAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -52,7 +52,7 @@ class ShoppingServiceTest {
             .build();
 
     @Mock
-    private ShoppingCartRepository shoppingCartRepository;
+    private ShoppingCartRepositoryAdapter shoppingCartRepository;
     @Mock
     private ProductClient productClient;
     private ShoppingService shoppingService;

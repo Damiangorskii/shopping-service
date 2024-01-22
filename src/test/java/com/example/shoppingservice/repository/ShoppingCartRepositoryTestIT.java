@@ -4,11 +4,13 @@ import com.example.shoppingservice.model.ShoppingCart;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 class ShoppingCartRepositoryTestIT {
@@ -20,31 +22,23 @@ class ShoppingCartRepositoryTestIT {
     void should_find_cart_by_id() {
         UUID cartId = UUID.randomUUID();
         ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
-        shoppingCartRepository.save(shoppingCart).block();
+        shoppingCartRepository.save(shoppingCart);
 
-        shoppingCartRepository.findShoppingCartById(cartId)
-                .as(StepVerifier::create)
-                .expectNextMatches(cart -> cart.getId().equals(cartId))
-                .expectComplete()
-                .verify();
+        Optional<ShoppingCart> foundCart = shoppingCartRepository.findShoppingCartById(cartId);
+        assertTrue(foundCart.isPresent());
+        assertEquals(cartId, foundCart.get().getId());
     }
 
     @Test
     void should_delete_by_id() {
         UUID cartId = UUID.randomUUID();
         ShoppingCart shoppingCart = new ShoppingCart(cartId, Collections.emptyList(), LocalDateTime.now());
-        shoppingCartRepository.save(shoppingCart).block();
+        shoppingCartRepository.save(shoppingCart);
 
-        shoppingCartRepository.deleteShoppingCartById(cartId)
-                .as(StepVerifier::create)
-                .expectComplete()
-                .verify();
+        shoppingCartRepository.deleteShoppingCartById(cartId);
 
-        shoppingCartRepository.findShoppingCartById(cartId)
-                .as(StepVerifier::create)
-                .expectNextCount(0)
-                .expectComplete()
-                .verify();
+        Optional<ShoppingCart> foundCart = shoppingCartRepository.findShoppingCartById(cartId);
+        assertFalse(foundCart.isPresent());
     }
 
 }

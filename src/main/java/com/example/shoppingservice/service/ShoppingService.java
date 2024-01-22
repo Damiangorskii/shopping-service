@@ -5,6 +5,7 @@ import com.example.shoppingservice.model.Product;
 import com.example.shoppingservice.model.ShoppingCart;
 import com.example.shoppingservice.model.ShoppingCartRequestBody;
 import com.example.shoppingservice.repository.ShoppingCartRepository;
+import com.example.shoppingservice.repository.ShoppingCartRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 @Service
 @AllArgsConstructor
 public class ShoppingService {
-    private final ShoppingCartRepository shoppingCartRepository;
+    private final ShoppingCartRepositoryAdapter shoppingCartRepository;
     private final ProductClient productClient;
 
     public Mono<ShoppingCart> retrieveShoppingCart(final UUID id) {

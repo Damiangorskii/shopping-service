@@ -1,17 +1,17 @@
 package com.example.shoppingservice.repository;
 
 import com.example.shoppingservice.model.ShoppingCart;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import reactor.core.publisher.Mono;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface ShoppingCartRepository extends ReactiveMongoRepository<ShoppingCart, String> {
-    Mono<ShoppingCart> findShoppingCartById(UUID id);
+public interface ShoppingCartRepository extends MongoRepository<ShoppingCart, String> {
+    Optional<ShoppingCart> findShoppingCartById(UUID id);
 
-    Mono<Void> deleteShoppingCartById(UUID id);
+    void deleteShoppingCartById(UUID id);
 
-    Mono<Void> deleteByInsertDateTimeBefore(LocalDateTime time);
+    void deleteByInsertDateTimeBefore(LocalDateTime time);
 
 }
