@@ -14,7 +14,7 @@ public class ShoppingCartCleanupScheduler {
 
     private final ShoppingService shoppingService;
 
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void cleanUpOldCarts() {
         shoppingService.deleteOldCarts()
                 .doOnSuccess(s -> log.info("Successfully removed old carts"))
